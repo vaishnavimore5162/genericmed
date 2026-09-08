@@ -19,7 +19,6 @@ import { AdminHeader } from './components/admin/AdminHeader';
 import { PharmacyOnboardingView } from './components/admin/PharmacyOnboardingView';
 import { CatalogEquivalenceView } from './components/admin/CatalogEquivalenceView';
 import { PricingAnomalyView } from './components/admin/PricingAnomalyView';
-import { SystemArchitectureView } from './components/admin/SystemArchitectureView';
 
 export default function App() {
   const [appMode, setAppMode] = useState<'patient' | 'admin'>('patient');
@@ -123,11 +122,6 @@ export default function App() {
         return {
           title: 'Pricing Anomaly Monitor & Rx Audit Queue',
           subtitle: 'Sub-floor anti-dumping enforcement, Schedule H1/X audit, and DPDP cryptographic verification',
-        };
-      case 'architecture':
-        return {
-          title: 'SaaS Platform Architecture & Multi-Tenant Blueprint',
-          subtitle: 'Modular monolith, Edge Ingress, multi-tenant DB isolation, and real-time smart split execution',
         };
       default:
         return {
@@ -273,7 +267,6 @@ export default function App() {
                 {adminTab === 'onboarding' && <PharmacyOnboardingView onShowToast={showToast} />}
                 {adminTab === 'catalog' && <CatalogEquivalenceView onShowToast={showToast} />}
                 {adminTab === 'anomalies' && <PricingAnomalyView onShowToast={showToast} />}
-                {adminTab === 'architecture' && <SystemArchitectureView onShowToast={showToast} />}
               </main>
             </div>
           </div>

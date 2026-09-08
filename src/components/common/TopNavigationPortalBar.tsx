@@ -88,7 +88,6 @@ export const TopNavigationPortalBar: React.FC<TopNavigationPortalBarProps> = ({
               { id: 'onboarding', label: '1. Pharmacy Verification' },
               { id: 'catalog', label: '2. Catalog & Equivalence' },
               { id: 'anomalies', label: '3. Pricing & Rx Audits' },
-              { id: 'architecture', label: '4. System Architecture' },
             ].map((t) => (
               <button
                 key={t.id}

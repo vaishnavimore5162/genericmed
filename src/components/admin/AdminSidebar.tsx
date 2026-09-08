@@ -34,13 +34,6 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
       badge: '19 Flagged',
       badgeColor: 'bg-[#ffdad6] text-[#93000a]',
     },
-    {
-      id: 'architecture',
-      label: 'System Architecture',
-      icon: 'schema',
-      badge: 'SaaS Blueprint',
-      badgeColor: 'bg-[#e5eeff] text-[#006a61]',
-    },
   ];
 
   const enforcementItems = [
