@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { INITIAL_CART } from './data/mockData';
-import { CartItem, MedicineOffer } from './types';
+import { INITIAL_CART, DEMO_USERS } from './data/mockData';
+import { CartItem, MedicineOffer, UserProfile } from './types';
 import { TopNavigationPortalBar } from './components/common/TopNavigationPortalBar';
 import { ToastNotification } from './components/common/ToastNotification';
 
@@ -10,6 +10,8 @@ import { MedicineDetailsScreen } from './components/patient/MedicineDetailsScree
 import { PatientAdherenceScreen } from './components/patient/PatientAdherenceScreen';
 import { CartCheckoutScreen } from './components/patient/CartCheckoutScreen';
 import { OrderTrackingScreen } from './components/patient/OrderTrackingScreen';
+import { AuthScreen } from './components/auth/AuthScreen';
+import { UserProfileModal } from './components/auth/UserProfileModal';
 
 // Clinical Governance Console
 import { AdminSidebar } from './components/admin/AdminSidebar';
@@ -27,8 +29,34 @@ export default function App() {
   const [isPhoneFramed, setIsPhoneFramed] = useState<boolean>(true);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // User Profile State (defaults to Rajesh Kumar with persistence)
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(() => {
+    try {
+      const saved = localStorage.getItem('genericmed_user');
+      return saved ? JSON.parse(saved) : DEMO_USERS[0];
+    } catch {
+      return DEMO_USERS[0];
+    }
+  });
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
+
   const showToast = (message: string) => {
     setToastMessage(message);
+  };
+
+  const handleLoginSuccess = (user: UserProfile) => {
+    setCurrentUser(user);
+    try {
+      localStorage.setItem('genericmed_user', JSON.stringify(user));
+    } catch {}
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    try {
+      localStorage.removeItem('genericmed_user');
+    } catch {}
+    showToast('Signed out of account');
   };
 
   const handleAddToCart = (offer: MedicineOffer) => {
@@ -124,6 +152,8 @@ export default function App() {
         isPhoneFramed={isPhoneFramed}
         onTogglePhoneFrame={() => setIsPhoneFramed(!isPhoneFramed)}
         cartCount={cartItems.reduce((acc, item) => acc + item.quantity, 0)}
+        currentUser={currentUser}
+        onOpenProfile={() => setIsProfileModalOpen(true)}
       />
 
       {/* Main View Area */}
@@ -160,6 +190,8 @@ export default function App() {
                     onAddToCart={handleAddToCart}
                     cartCount={cartItems.reduce((acc, item) => acc + item.quantity, 0)}
                     onShowToast={showToast}
+                    currentUser={currentUser}
+                    onOpenProfile={() => setIsProfileModalOpen(true)}
                   />
                 )}
 
@@ -186,6 +218,7 @@ export default function App() {
                     onUpdateQuantity={handleUpdateQuantity}
                     onClearCart={handleClearCart}
                     onShowToast={showToast}
+                    currentUser={currentUser}
                   />
                 )}
 
@@ -193,6 +226,16 @@ export default function App() {
                   <OrderTrackingScreen
                     onNavigate={setPatientScreen}
                     onShowToast={showToast}
+                  />
+                )}
+
+                {patientScreen === 'auth' && (
+                  <AuthScreen
+                    onNavigate={setPatientScreen}
+                    onLoginSuccess={handleLoginSuccess}
+                    onShowToast={showToast}
+                    currentUser={currentUser}
+                    onLogout={handleLogout}
                   />
                 )}
               </div>
@@ -222,6 +265,8 @@ export default function App() {
                 subtitle={adminHeaderInfo.subtitle}
                 onSwitchToPatientView={() => setAppMode('patient')}
                 onShowToast={showToast}
+                currentUser={currentUser}
+                onOpenProfile={() => setIsProfileModalOpen(true)}
               />
 
               <main className="flex-1 overflow-y-auto">
@@ -234,6 +279,17 @@ export default function App() {
           </div>
         )}
       </div>
+
+      {/* User Profile & Credential Modal */}
+      <UserProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        currentUser={currentUser}
+        onLogout={handleLogout}
+        onSwitchUser={handleLoginSuccess}
+        onNavigate={setPatientScreen}
+        onShowToast={showToast}
+      />
 
       {/* Floating Toast Notification */}
       <ToastNotification message={toastMessage} onClose={() => setToastMessage(null)} />

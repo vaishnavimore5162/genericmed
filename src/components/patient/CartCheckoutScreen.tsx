@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CartItem } from '../../types';
+import { CartItem, UserProfile } from '../../types';
 
 interface CartCheckoutScreenProps {
   onNavigate: (screen: string) => void;
@@ -7,6 +7,7 @@ interface CartCheckoutScreenProps {
   onUpdateQuantity: (id: string, newQty: number) => void;
   onClearCart: () => void;
   onShowToast: (msg: string) => void;
+  currentUser?: UserProfile | null;
 }
 
 export const CartCheckoutScreen: React.FC<CartCheckoutScreenProps> = ({
@@ -15,6 +16,7 @@ export const CartCheckoutScreen: React.FC<CartCheckoutScreenProps> = ({
   onUpdateQuantity,
   onClearCart,
   onShowToast,
+  currentUser,
 }) => {
   const [strictEquivalenceOnly, setStrictEquivalenceOnly] = useState(true);
   const [callForSubstitution, setCallForSubstitution] = useState(false);
@@ -325,6 +327,53 @@ export const CartCheckoutScreen: React.FC<CartCheckoutScreenProps> = ({
               </div>
             </label>
           </div>
+        </div>
+
+        {/* Patient Delivery & Identity Verification */}
+        <div className="bg-white rounded-xl p-4 shadow-sm border border-[#e5eeff] space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-[#006a61] text-[20px]">location_on</span>
+              <h3 className="font-headline-sm text-[#0b1c30] text-[15px]">Delivery &amp; Patient Identity</h3>
+            </div>
+            <button
+              onClick={() => onNavigate('auth')}
+              className="text-[#006a61] text-[11px] font-semibold hover:underline"
+            >
+              {currentUser ? 'Switch / Re-login' : 'Sign In'}
+            </button>
+          </div>
+
+          {currentUser ? (
+            <div className="bg-[#eff4ff] p-3 rounded-lg flex items-center justify-between text-[12px]">
+              <div>
+                <div className="font-body-md-semibold text-[#0b1c30] flex items-center gap-1.5">
+                  <span>{currentUser.name}</span>
+                  {currentUser.abhaId && (
+                    <span className="text-[10px] font-mono text-[#006a61] bg-white px-1.5 py-0.2 rounded border border-[#cbdbf5]">
+                      ABHA: {currentUser.abhaId}
+                    </span>
+                  )}
+                </div>
+                <div className="text-[#45464d] text-[11px] mt-0.5">
+                  {currentUser.address || 'Koramangala 4th Block, Bengaluru'} • {currentUser.phone}
+                </div>
+              </div>
+              <span className="material-symbols-outlined text-[#006a61] text-[18px]">verified</span>
+            </div>
+          ) : (
+            <div className="bg-[#eff4ff] p-3 rounded-lg flex items-center justify-between text-[12px]">
+              <div className="text-[#45464d] text-[11px]">
+                Checking out as Guest. Sign in to link your <strong>Ayushman Bharat (ABHA)</strong> record and auto-apply govt subsidies.
+              </div>
+              <button
+                onClick={() => onNavigate('auth')}
+                className="px-2.5 py-1 bg-[#006a61] text-white rounded-lg text-[11px] font-semibold shrink-0 ml-2"
+              >
+                Sign In
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Payment & Regulatory Bill Details */}

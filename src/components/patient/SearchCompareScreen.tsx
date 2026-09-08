@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { ASSETS, VERIFIED_OFFERS } from '../../data/mockData';
+import { UserProfile } from '../../types';
 
 interface SearchCompareScreenProps {
   onNavigate: (screen: string) => void;
   onAddToCart: (item: { name: string; price: number; qty: number }) => void;
   onShowToast: (msg: string) => void;
   cartCount: number;
+  currentUser?: UserProfile | null;
+  onOpenProfile?: () => void;
 }
 
 export const SearchCompareScreen: React.FC<SearchCompareScreenProps> = ({
@@ -13,6 +16,8 @@ export const SearchCompareScreen: React.FC<SearchCompareScreenProps> = ({
   onAddToCart,
   onShowToast,
   cartCount,
+  currentUser,
+  onOpenProfile,
 }) => {
   const [searchQuery, setSearchQuery] = useState('Atorvastatin 20mg');
   const [selectedFilter, setSelectedFilter] = useState('lowest');
@@ -98,14 +103,30 @@ export const SearchCompareScreen: React.FC<SearchCompareScreenProps> = ({
               </span>
             </button>
 
-            <button 
-              onClick={() => onNavigate('adherence')}
-              aria-label="User Profile" 
-              className="w-8 h-8 rounded-full bg-[#0f172a] text-white flex items-center justify-center shrink-0 ml-1 hover:opacity-90"
-              title="Rajesh Kumar Profile"
-            >
-              <span className="material-symbols-outlined text-[18px]">person</span>
-            </button>
+            {currentUser ? (
+              <button 
+                onClick={() => onOpenProfile ? onOpenProfile() : onNavigate('auth')}
+                aria-label="User Profile" 
+                className="w-8 h-8 rounded-full bg-[#006a61] text-[#89f5e7] flex items-center justify-center shrink-0 ml-1 hover:opacity-90 font-bold text-[12px] border border-[#86f2e4]/40"
+                title={`${currentUser.name} (${currentUser.role}) - Click for Account Profile`}
+              >
+                {currentUser.avatarUrl ? (
+                  <img src={currentUser.avatarUrl} alt={currentUser.name} className="w-full h-full rounded-full object-cover" />
+                ) : (
+                  currentUser.name.charAt(0)
+                )}
+              </button>
+            ) : (
+              <button
+                onClick={() => onNavigate('auth')}
+                aria-label="Sign In or Register"
+                className="px-2.5 py-1 rounded-xl bg-[#006a61] text-white text-[11px] font-semibold flex items-center gap-1 hover:bg-[#00524b] transition-colors ml-1"
+                title="Sign In / Register"
+              >
+                <span className="material-symbols-outlined text-[15px]">login</span>
+                <span className="hidden xs:inline">Sign In</span>
+              </button>
+            )}
           </div>
         </div>
 

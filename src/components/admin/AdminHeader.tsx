@@ -1,11 +1,14 @@
 import React from 'react';
 import { ASSETS } from '../../data/mockData';
+import { UserProfile } from '../../types';
 
 interface AdminHeaderProps {
   title: string;
   subtitle: string;
   onSwitchToPatientView: () => void;
   onShowToast: (msg: string) => void;
+  currentUser?: UserProfile | null;
+  onOpenProfile?: () => void;
 }
 
 export const AdminHeader: React.FC<AdminHeaderProps> = ({
@@ -13,6 +16,8 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
   subtitle,
   onSwitchToPatientView,
   onShowToast,
+  currentUser,
+  onOpenProfile,
 }) => {
   return (
     <header className="h-16 bg-white border-b border-[#e5eeff] px-6 flex items-center justify-between sticky top-0 z-30 shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
@@ -63,15 +68,23 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
         </button>
 
         {/* Admin Profile */}
-        <div className="flex items-center gap-2 pl-2 border-l border-[#e5eeff]">
-          <div className="w-8 h-8 rounded-full overflow-hidden bg-[#e5eeff] border border-[#c6c6cd]">
-            <img src={ASSETS.ananyaAvatar} alt="Dr. Ananya Sharma" className="w-full h-full object-cover" />
+        <button
+          onClick={onOpenProfile}
+          className="flex items-center gap-2 pl-2 border-l border-[#e5eeff] hover:opacity-80 transition-opacity text-left cursor-pointer"
+          title="Account Profile & Switcher"
+        >
+          <div className="w-8 h-8 rounded-full overflow-hidden bg-[#e5eeff] border border-[#c6c6cd] shrink-0">
+            <img src={currentUser?.avatarUrl || ASSETS.ananyaAvatar} alt={currentUser?.name || "Dr. Ananya Sharma"} className="w-full h-full object-cover" />
           </div>
           <div className="hidden sm:block text-left">
-            <div className="font-body-md-semibold text-[#0b1c30] text-[12px]">Dr. Ananya Sharma</div>
-            <div className="font-label-caps text-[#006a61] text-[9px]">Super Admin • CDSCO Liaison</div>
+            <div className="font-body-md-semibold text-[#0b1c30] text-[12px] truncate max-w-[130px]">
+              {currentUser?.name || "Dr. Ananya Sharma"}
+            </div>
+            <div className="font-label-caps text-[#006a61] text-[9px] uppercase">
+              {currentUser?.role === 'regulator' ? 'CDSCO Liaison Auditor' : currentUser?.role === 'pharmacist' ? 'Licensed Pharmacist' : 'Auditor Console'}
+            </div>
           </div>
-        </div>
+        </button>
       </div>
     </header>
   );

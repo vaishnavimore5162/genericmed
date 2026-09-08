@@ -1,4 +1,5 @@
 import React from 'react';
+import { UserProfile } from '../../types';
 
 interface TopNavigationPortalBarProps {
   appMode: 'patient' | 'admin';
@@ -10,6 +11,8 @@ interface TopNavigationPortalBarProps {
   isPhoneFramed: boolean;
   onTogglePhoneFrame: () => void;
   cartCount: number;
+  currentUser?: UserProfile | null;
+  onOpenProfile?: () => void;
 }
 
 export const TopNavigationPortalBar: React.FC<TopNavigationPortalBarProps> = ({
@@ -22,6 +25,8 @@ export const TopNavigationPortalBar: React.FC<TopNavigationPortalBarProps> = ({
   isPhoneFramed,
   onTogglePhoneFrame,
   cartCount,
+  currentUser,
+  onOpenProfile,
 }) => {
   return (
     <div className="bg-[#0b1c30] text-white border-b border-[#1e293b] px-3 py-2 flex items-center justify-between gap-2 text-[12px] select-none sticky top-0 z-50">
@@ -62,6 +67,7 @@ export const TopNavigationPortalBar: React.FC<TopNavigationPortalBarProps> = ({
               { id: 'adherence', label: '3. Regimen & Adherence' },
               { id: 'cart', label: `4. Cart (${cartCount})` },
               { id: 'orders', label: '5. Order Tracking' },
+              { id: 'auth', label: '6. Login / Register' },
             ].map((s) => (
               <button
                 key={s.id}
@@ -102,6 +108,31 @@ export const TopNavigationPortalBar: React.FC<TopNavigationPortalBarProps> = ({
 
       {/* Right Controls */}
       <div className="flex items-center gap-2">
+        {/* User Account Button */}
+        {currentUser ? (
+          <button
+            onClick={onOpenProfile}
+            className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[#131b2e] hover:bg-[#1e293b] text-white text-[11px] border border-[#1e293b] transition-colors"
+            title="View Account Profile"
+          >
+            <div className="w-5 h-5 rounded-full bg-[#006a61] text-[#89f5e7] flex items-center justify-center text-[10px] font-bold">
+              {currentUser.name.charAt(0)}
+            </div>
+            <span className="hidden md:inline font-medium max-w-[100px] truncate">{currentUser.name}</span>
+            <span className="text-[9px] uppercase font-mono px-1 py-0.2 rounded bg-[#006a61]/60 text-[#89f5e7] border border-[#86f2e4]/30 hidden sm:inline">
+              {currentUser.role}
+            </span>
+          </button>
+        ) : (
+          <button
+            onClick={() => onSetPatientScreen('auth')}
+            className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#006a61] hover:bg-[#00524b] text-white text-[11px] font-semibold transition-colors"
+          >
+            <span className="material-symbols-outlined text-[15px]">login</span>
+            <span>Login / Register</span>
+          </button>
+        )}
+
         {appMode === 'patient' && (
           <button
             onClick={onTogglePhoneFrame}
@@ -122,3 +153,4 @@ export const TopNavigationPortalBar: React.FC<TopNavigationPortalBarProps> = ({
     </div>
   );
 };
+

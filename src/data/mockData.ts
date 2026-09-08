@@ -6,7 +6,8 @@ import {
   CanonicalMolecule, 
   PharmacyApplicant, 
   PricingAnomaly, 
-  RxVerificationQueueItem 
+  RxVerificationQueueItem,
+  UserProfile 
 } from '../types';
 
 export const ASSETS = {
@@ -535,3 +536,69 @@ export const RX_AUDIT_QUEUE: RxVerificationQueueItem[] = [
     status: "approved"
   }
 ];
+
+export const DEMO_USERS: UserProfile[] = [
+  {
+    id: "usr-01",
+    name: "Rajesh Kumar",
+    role: "patient",
+    email: "rajesh.kumar@health.gov.in",
+    phone: "+91 98450 21980",
+    abhaId: "91-4829-1029-3819",
+    age: 54,
+    gender: "Male",
+    city: "Bengaluru",
+    pincode: "560034",
+    address: "Flat 402, Green Glen Layout, Koramangala 4th Block",
+    isVerified: true,
+    linkedPrescriptionsCount: 3,
+    activeOrdersCount: 1,
+  },
+  {
+    id: "usr-02",
+    name: "Pooja Sharma",
+    role: "patient",
+    email: "pooja.sharma@care.org",
+    phone: "+91 98201 44512",
+    abhaId: "14-9921-8840-7712",
+    age: 36,
+    gender: "Female",
+    city: "Bengaluru",
+    pincode: "560102",
+    address: "HSR Layout Sector 2, 14th Main",
+    isVerified: true,
+    linkedPrescriptionsCount: 2,
+    activeOrdersCount: 0,
+  },
+  {
+    id: "usr-03",
+    name: "Suresh Patel, R.Ph",
+    role: "pharmacist",
+    email: "spatel.janaushadhi@bppi.gov.in",
+    phone: "+91 98220 89123",
+    licenseNumber: "KA-BGL-2023-R402",
+    pharmacistRegNo: "KSPC-88210",
+    pharmacyName: "Govt Jan Aushadhi Kendra #402",
+    city: "Bengaluru",
+    pincode: "560102",
+    address: "Sector 2, HSR Layout, near Govt Hospital",
+    isVerified: true,
+    linkedPrescriptionsCount: 184,
+    activeOrdersCount: 12,
+  },
+  {
+    id: "usr-04",
+    name: "Dr. Ananya Sharma",
+    role: "regulator",
+    email: "ananya.sharma@cdsco.nic.in",
+    phone: "+91 98110 54321",
+    regulatorOfficerId: "CDSCO-GOI-2024-098",
+    regulatorDesignation: "Central Drug Inspector & CDSCO Liaison",
+    jurisdictionZone: "Zone-South (KA/TN/KL)",
+    city: "Bengaluru / New Delhi",
+    pincode: "560001",
+    isVerified: true,
+    avatarUrl: ASSETS.ananyaAvatar,
+  },
+];
+

@@ -153,3 +153,30 @@ export interface RxVerificationQueueItem {
   geo?: string;
   status: 'pending' | 'approved' | 'rejected' | 'blocked';
 }
+
+export type UserRole = 'patient' | 'pharmacist' | 'regulator';
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  role: UserRole;
+  email: string;
+  phone: string;
+  abhaId?: string;
+  age?: number;
+  gender?: 'Male' | 'Female' | 'Other' | 'Prefer not to say';
+  city?: string;
+  pincode?: string;
+  address?: string;
+  licenseNumber?: string;
+  pharmacistRegNo?: string;
+  pharmacyName?: string;
+  regulatorOfficerId?: string;
+  regulatorDesignation?: string;
+  jurisdictionZone?: string;
+  isVerified: boolean;
+  avatarUrl?: string;
+  linkedPrescriptionsCount?: number;
+  activeOrdersCount?: number;
+}
+
