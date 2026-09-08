@@ -1,0 +1,6 @@
+{
+  "name": "GenericMed",
+  "description": "Generic medicine discovery, CDSCO bioequivalence validation, multi-store smart dispensing, and clinical governance console.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
